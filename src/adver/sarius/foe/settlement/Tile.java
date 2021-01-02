@@ -1,5 +1,8 @@
 package adver.sarius.foe.settlement;
 
+import java.awt.Color;
+import java.util.Random;
+
 public class Tile {
 
 	// TODO: Does that make sense?
@@ -8,12 +11,24 @@ public class Tile {
 	private int posY;
 	private int height;
 	private int width;
+	private Color color;
+	private static final Random RAND = new Random();
 
-	public Tile(int height, int width, int x, int y) {
+	public static Color randomColor() {
+		return new Color(RAND.nextInt(16777215));
+	}
+
+	public Tile(int height, int width, int x, int y, Color color) {
 		this.posX = x;
 		this.posY = y;
 		this.height = height;
 		this.width = width;
+		this.color = color;
+	}
+
+	public Tile(int height, int width, int x, int y) {
+		// TODO: Verify range
+		this(height, width, x, y, randomColor());
 	}
 
 	public Tile(int lenght, int width) {
@@ -43,5 +58,21 @@ public class Tile {
 
 	public int getWidth() {
 		return width;
+	}
+
+	public Color getColor() {
+		return this.color;
+	}
+
+	public boolean intersects(Tile tile) {
+		return this.getPosX() > tile.getPosX() + tile.getWidth() || this.getPosY() > tile.getPosY() + tile.getHeight()
+				|| tile.getPosX() > this.getPosX() + this.getWidth()
+				|| tile.getPosY() > this.getPosY() + this.getHeight();
+	}
+
+	public boolean contains(Tile tile) {
+		return this.getPosX() <= tile.getPosX() && this.getPosY() <= tile.getPosY()
+				&& this.getPosX() + this.getWidth() >= tile.getPosX() + tile.getWidth()
+				&& this.getPosY() + this.getHeight() >= tile.getPosY() + tile.getHeight();
 	}
 }

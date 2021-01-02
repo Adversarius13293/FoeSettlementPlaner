@@ -1,5 +1,6 @@
 package adver.sarius.foe.settlement;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,53 +9,88 @@ public class Settlement {
 	private Tile baseLayout;
 	private List<Tile> blockedTilesToBuy;
 	private List<Tile> permanentlyBlockedTiles;
-	private List<Building> availableBuildings;
+	private List<Tile> impediments;
 	private Building embassy;
+	private List<Building> placedBuildings;
+
+	// TODO: find some static solution for building types?
+	private List<Building> availableBuildings;
 
 	private Settlement() {
+		
+	}
 
+	public Tile getBaseLayout() {
+		return baseLayout;
+	}
+
+	public List<Tile> getBlockedTilesToBuy() {
+		return blockedTilesToBuy;
+	}
+
+	public List<Tile> getPermanentlyBlockedTiles() {
+		return permanentlyBlockedTiles;
+	}
+
+	public Building getEmbassy() {
+		return embassy;
+	}
+
+	public List<Building> getPlacedBuildings() {
+		return placedBuildings;
+	}
+
+	public List<Building> getAvailableBuildings() {
+		return availableBuildings;
+	}
+
+	public List<Tile> getImpediments() {
+		return impediments;
 	}
 
 	public static Settlement getNewFeudalJapan() {
 		Settlement s = new Settlement();
-		s.baseLayout = new Tile(6 * 4, 6 * 4);
+		s.placedBuildings = new ArrayList<>();
+		s.impediments = new ArrayList<>();
+		s.baseLayout = new Tile(6 * 4, 6 * 4, 0 , 0, Color.GREEN);
+
 		s.blockedTilesToBuy = new ArrayList<>();
-		s.blockedTilesToBuy.add(new Tile(4, 4, 0, 0));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 4, 0));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 8, 0));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 0, 0, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 4, 0, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 8, 0, Color.LIGHT_GRAY));
 		// s.blockedTilesToBuy.add(new Tile(4, 4, 12, 0));
 		// s.blockedTilesToBuy.add(new Tile(4, 4, 16, 0));
 
-		s.blockedTilesToBuy.add(new Tile(4, 4, 0, 4));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 4, 4));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 8, 4));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 0, 4, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 4, 4, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 8, 4, Color.LIGHT_GRAY));
 		// s.blockedTilesToBuy.add(new Tile(4, 4, 12, 4));
 		// s.blockedTilesToBuy.add(new Tile(4, 4, 16, 4));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 20, 4));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 20, 4, Color.LIGHT_GRAY));
 
-		s.blockedTilesToBuy.add(new Tile(4, 4, 4, 8));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 8, 8));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 12, 8));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 16, 8));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 20, 8));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 4, 8, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 8, 8, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 12, 8, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 16, 8, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 20, 8, Color.LIGHT_GRAY));
 
-		s.blockedTilesToBuy.add(new Tile(4, 4, 12, 12));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 16, 12));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 20, 12));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 12, 12, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 16, 12, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 20, 12, Color.LIGHT_GRAY));
 
-		s.blockedTilesToBuy.add(new Tile(4, 4, 12, 16));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 16, 16));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 20, 16));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 12, 16, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 16, 16, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 20, 16, Color.LIGHT_GRAY));
 
-		s.blockedTilesToBuy.add(new Tile(4, 4, 16, 20));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 20, 20));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 16, 20, Color.LIGHT_GRAY));
+		s.blockedTilesToBuy.add(new Tile(4, 4, 20, 20, Color.LIGHT_GRAY));
 
 		s.permanentlyBlockedTiles = new ArrayList<>();
-		s.permanentlyBlockedTiles.add(new Tile(4, 4, 0, 8));
-		s.permanentlyBlockedTiles.add(new Tile(4, 4, 12, 20));
-		s.permanentlyBlockedTiles.add(new Tile(3 * 4, 3 * 4, 0, 12));
+		s.permanentlyBlockedTiles.add(new Tile(4, 4, 0, 8, Color.BLACK));
+		s.permanentlyBlockedTiles.add(new Tile(4, 4, 12, 20, Color.BLACK));
+		s.permanentlyBlockedTiles.add(new Tile(3 * 4, 3 * 4, 0, 12, Color.BLACK));
+		s.permanentlyBlockedTiles.add(new Tile(4, 4, 20, 0, Color.BLACK));
 
-		// TODO: find some static solution for building types?
 		s.availableBuildings = new ArrayList<>();
 
 		s.availableBuildings.add(new Building(2, 2, "Gasshō-zukuri-Hütte", 125, 20, 0, 0));
