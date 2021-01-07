@@ -58,4 +58,25 @@ public class Building extends Tile {
 		return roadPriority;
 	}
 	
+	/**
+	 * Compares this building values:
+	 * roadPriority, size, coins, name.
+	 * 
+	 * @param building2 building to compare against.
+	 * @return positive value if the this object is higher priority, 0 if they are equal, negative number if the second object is higher.
+	 */
+	public int compareBuildingValueTo(Building building2) {
+		// TODO: Remove method? Because it is a very specific ordering. Use Comparator?
+		if (this.getRoadPriority() - building2.getRoadPriority() != 0) {
+			return this.getRoadPriority() - building2.getRoadPriority();
+		} else if (this.getSurface() - building2.getSurface() != 0) {
+			return this.getSurface() - building2.getSurface();
+		} else if (this.getPosX() - building2.getPosX() != 0) {
+			return this.getPosX() - building2.getPosX();
+		} else if (this.getCoinProduction() - building2.getCoinProduction() != 0) {
+			return this.getCoinProduction() - building2.getCoinProduction();
+		} else {
+			return this.getName().compareTo(building2.getName());
+		}
+	}
 }

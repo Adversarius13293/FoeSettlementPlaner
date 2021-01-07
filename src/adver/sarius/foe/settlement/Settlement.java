@@ -53,41 +53,51 @@ public class Settlement {
 		return impediments;
 	}
 
-	public List<Building> getBuildingsWithRoad(){
+	public List<Building> getBuildingsWithRoad() {
 		// TODO: starting from embassy, recursively find everything with a valid path.
 		return null;
 	}
-	
+
 	public boolean doNecesssaryBuildingsHaveStreet() {
 		// TODO: Better name. And logic. checkRoadRequirements
 		return false;
 	}
-	
-	
+
+	/**
+	 * Rearranges the remaining buildings list. Order by roadPriority, size, coins,
+	 * name.
+	 */
+	public void sortRemainingBuildings() {
+		remainingBuildings.sort(Building::compareBuildingValueTo);
+	}
+
 	public int getCoinProduction() {
-		// TODO: Everything that needs or may need a road and has a road. And everything that does not need a road.
+		// TODO: Everything that needs or may need a road and has a road. And everything
+		// that does not need a road.
 		return -1;
 	}
-	
-	public boolean doesBuildingFit(Building building) {
-		if (!baseLayout.contains(building)) {
+
+	public boolean doesTileFit(Tile tile) {
+		if (!baseLayout.contains(tile)) {
 			return false;
 		}
-		
+
 		// TODO: somehow check with only one list?
-		if(blockedTilesToBuy.stream().anyMatch(t -> t.intersects(building))) {
+		if (blockedTilesToBuy.stream().anyMatch(t -> t.intersects(tile))) {
 			return false;
 		}
-		if(permanentlyBlockedTiles.stream().anyMatch(t -> t.intersects(building))) {
+		if (permanentlyBlockedTiles.stream().anyMatch(t -> t.intersects(tile))) {
 			return false;
 		}
-		if(impediments.stream().anyMatch(t -> t.intersects(building))) {
+		if (impediments.stream().anyMatch(t -> t.intersects(tile))) {
 			return false;
 		}
-		if(placedBuildings.stream().anyMatch(t -> {return t != building && t.intersects(building);})) {
+		if (placedBuildings.stream().anyMatch(t -> {
+			return t != tile && t.intersects(tile);
+		})) {
 			return false;
 		}
-		
+
 		return true;
 	}
 

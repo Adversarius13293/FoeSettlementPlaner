@@ -21,7 +21,7 @@ public class Main {
 		Settlement settlement = Settlement.getNewFeudalJapan();
 		
 		
-		new SettlementOptimizer().doSomething(settlement);
+		new SettlementOptimizer().testAllSetups(settlement);
 		
 		
 		JFrame mainFrame = new JFrame("Kulturelle Siedlung");
