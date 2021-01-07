@@ -12,12 +12,13 @@ public class Settlement {
 	private List<Tile> impediments;
 	private Building embassy;
 	private List<Building> placedBuildings;
+	private List<Building> remainingBuildings;
 
 	// TODO: find some static solution for building types?
 	private List<Building> availableBuildings;
 
 	private Settlement() {
-		
+
 	}
 
 	public Tile getBaseLayout() {
@@ -44,15 +45,58 @@ public class Settlement {
 		return availableBuildings;
 	}
 
+	public List<Building> getRemainingBuildings() {
+		return remainingBuildings;
+	}
+
 	public List<Tile> getImpediments() {
 		return impediments;
+	}
+
+	public List<Building> getBuildingsWithRoad(){
+		// TODO: starting from embassy, recursively find everything with a valid path.
+		return null;
+	}
+	
+	public boolean doNecesssaryBuildingsHaveStreet() {
+		// TODO: Better name. And logic. checkRoadRequirements
+		return false;
+	}
+	
+	
+	public int getCoinProduction() {
+		// TODO: Everything that needs or may need a road and has a road. And everything that does not need a road.
+		return -1;
+	}
+	
+	public boolean doesBuildingFit(Building building) {
+		if (!baseLayout.contains(building)) {
+			return false;
+		}
+		
+		// TODO: somehow check with only one list?
+		if(blockedTilesToBuy.stream().anyMatch(t -> t.intersects(building))) {
+			return false;
+		}
+		if(permanentlyBlockedTiles.stream().anyMatch(t -> t.intersects(building))) {
+			return false;
+		}
+		if(impediments.stream().anyMatch(t -> t.intersects(building))) {
+			return false;
+		}
+		if(placedBuildings.stream().anyMatch(t -> {return t != building && t.intersects(building);})) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	public static Settlement getNewFeudalJapan() {
 		Settlement s = new Settlement();
 		s.placedBuildings = new ArrayList<>();
 		s.impediments = new ArrayList<>();
-		s.baseLayout = new Tile(6 * 4, 6 * 4, 0 , 0, Color.GREEN);
+		s.remainingBuildings = new ArrayList<>();
+		s.baseLayout = new Tile(6 * 4, 6 * 4, 0, 0, Color.GREEN);
 
 		s.blockedTilesToBuy = new ArrayList<>();
 		s.blockedTilesToBuy.add(new Tile(4, 4, 0, 0, Color.LIGHT_GRAY));

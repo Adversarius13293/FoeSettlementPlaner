@@ -21,6 +21,9 @@ public class Main {
 		Settlement settlement = Settlement.getNewFeudalJapan();
 		
 		
+		new SettlementOptimizer().doSomething(settlement);
+		
+		
 		JFrame mainFrame = new JFrame("Kulturelle Siedlung");
 		mainFrame.setLayout(new BorderLayout());
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
