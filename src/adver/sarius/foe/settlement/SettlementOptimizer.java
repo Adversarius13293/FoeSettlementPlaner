@@ -26,9 +26,7 @@ public class SettlementOptimizer {
 
 				embassy.setPosition(x, y);
 				if (settlement.doesTileFit(embassy)) {
-					// recursively try all remaining buildings
-					// TODO:
-
+					tryNextBuilding(settlement, globalMinX, globalMinY);
 				}
 			}
 		}
@@ -76,7 +74,7 @@ public class SettlementOptimizer {
 			for (int y = startY; y <= globalMaxY - building.getHeight(); y++) {
 				building.setPosition(x, y);
 
-				if (settlement.doesTileFit(building) && settlement.doNecesssaryBuildingsHaveStreet()) {
+				if (settlement.doesTileFit(building) && settlement.doNecesssaryBuildingsHaveRoad()) {
 					// if next building in the list is same dimension, they don't need to switch
 					// positions. So the next buildings checks can start from current index.
 					if (!settlement.getRemainingBuildings().isEmpty()) {
@@ -97,9 +95,9 @@ public class SettlementOptimizer {
 							this.optimalPlacedBuildings = settlement.getPlacedBuildings().stream().map(Building::new)
 									.collect(Collectors.toList());
 						}
-						// required streets are guaranteed at this point.
-						if (settlement.doOptionalBuildingsHaveStreet()) {
-							// if optional streets are also true, there is no need to test any more setups.
+						// required roads are guaranteed at this point.
+						if (settlement.doOptionalBuildingsHaveRoad()) {
+							// if optional roads are also true, there is no need to test any more setups.
 							// also in this case the coin production has to be optimal.
 							this.stopRecursion = true;
 						}

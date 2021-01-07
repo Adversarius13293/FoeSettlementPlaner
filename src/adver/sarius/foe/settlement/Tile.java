@@ -66,7 +66,7 @@ public class Tile {
 	
 	public Color getColor() {
 		return this.color;
-	}	
+	}
 
 	public boolean intersects(Tile tile) {
 		return this.getPosX() > tile.getPosX() + tile.getWidth() || this.getPosY() > tile.getPosY() + tile.getHeight()

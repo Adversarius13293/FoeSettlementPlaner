@@ -2,7 +2,9 @@ package adver.sarius.foe.settlement;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Settlement {
 
@@ -53,18 +55,84 @@ public class Settlement {
 		return impediments;
 	}
 
-	public List<Building> getBuildingsWithRoad() {
-		// TODO: starting from embassy, recursively find everything with a valid path.
-		return null;
+	private Set<Building> getBuildingsWithRoad() {
+		// TODO: starting from embassy, recursively find everything with a valid road.
+		// TODO: Optimization idea: have a stack of Tiles instead of creating new ones
+		List<Tile> checkedTiles = new ArrayList<>();
+		Set<Building> connectedBuildings = new HashSet<>();
+		int maxX = embassy.getWidth() + embassy.getPosX() + 1;
+		int maxY = embassy.getHeight() + embassy.getPosY() + 1;
+		for (int x = embassy.getPosX() - 1; x <= maxX; x++) {
+			for (int y = embassy.getPosY() - 1; y <= maxY; y++) {
+				if ((x == embassy.getPosX() - 1 || x == maxX) && (y == embassy.getPosY() - 1 || y == maxY)) {
+					// skip corners
+					continue;
+				}
+				Tile road = new Tile(1, 1, x, y);
+				checkedTiles.add(road);
+				// TODO: find more efficient way to only check border of embassy?
+				if (embassy.contains(road) || !doesTileFit(road)) {
+					continue;
+				} else {
+					findOtherRoads(road, checkedTiles, connectedBuildings);
+				}
+			}
+		}
+		return connectedBuildings;
 	}
 
-	public boolean doNecesssaryBuildingsHaveStreet() {
-		// TODO: Better name. And logic? checkRoadRequirements
-		return false;
+	/**
+	 * Find all other roads connected to the last road tile. Connected buildings will be
+	 * added to the set.
+	 * 
+	 * @param lastTile
+	 *            the last valid 1x1 road tile checked.
+	 * @param checkedTiles
+	 *            list of already checked positions
+	 * @param connectedBuildings
+	 *            all buildings touching a valid road.
+	 */
+	private void findOtherRoads(Tile lastTile, List<Tile> checkedTiles, Set<Building> connectedBuildings) {
+		// TODO: Iterate over coordinates instead of distances to only compute addition
+		// once for performance?
+		for (int x = -1; x < 2; x++) {
+			for (int y = -1; y < 2; y++) {
+				// TODO: find better way to only check the 4 directions?
+				if (x * y == 0 && x + y != 0) {
+					int newX = lastTile.getPosX() + x;
+					int newY = lastTile.getPosY() + y;
+					if (checkedTiles.stream().anyMatch(t -> t.getPosX() == newX && t.getPosY() == newY)) {
+						// Already checked that spot.
+						continue;
+					} else {
+						Tile currentTile = new Tile(1, 1, newX, newY);
+						checkedTiles.add(currentTile);
+						if (doesTileFit(currentTile)) {
+							findOtherRoads(currentTile, checkedTiles, connectedBuildings);
+						} else {
+							Building building = getBuildingContaining(currentTile);
+							if (building != null) {
+								connectedBuildings.add(building);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
-	
-	public boolean doOptionalBuildingsHaveStreet() {
-		return false;
+
+	private Building getBuildingContaining(Tile tile) {
+		return placedBuildings.stream().filter(b -> b.contains(tile)).findFirst().orElse(null);
+	}
+
+	public boolean doNecesssaryBuildingsHaveRoad() {
+		Set<Building> connected = getBuildingsWithRoad();
+		return placedBuildings.stream().filter(b -> b.getRoadPriority() > 0).allMatch(b -> connected.contains(b));
+	}
+
+	public boolean doOptionalBuildingsHaveRoad() {
+		Set<Building> connected = getBuildingsWithRoad();
+		return placedBuildings.stream().filter(b -> b.getRoadPriority() == 0).allMatch(b -> connected.contains(b));
 	}
 
 	/**
@@ -116,7 +184,7 @@ public class Settlement {
 		s.blockedTilesToBuy.add(new Tile(4, 4, 0, 0, Color.LIGHT_GRAY));
 		s.blockedTilesToBuy.add(new Tile(4, 4, 4, 0, Color.LIGHT_GRAY));
 		s.blockedTilesToBuy.add(new Tile(4, 4, 8, 0, Color.LIGHT_GRAY));
-		// s.blockedTilesToBuy.add(new Tile(4, 4, 12, 0));
+		// s.blockedTilesToBuy.add(new Tile(4, 4, 12, 0)); // starting squares
 		// s.blockedTilesToBuy.add(new Tile(4, 4, 16, 0));
 
 		s.blockedTilesToBuy.add(new Tile(4, 4, 0, 4, Color.LIGHT_GRAY));

@@ -57,13 +57,14 @@ public class Building extends Tile {
 	public int getRoadPriority() {
 		return roadPriority;
 	}
-	
+
 	/**
-	 * Compares this building values:
-	 * roadPriority, size, coins, name.
+	 * Compares this building values: roadPriority, size, coins, name.
 	 * 
-	 * @param building2 building to compare against.
-	 * @return positive value if the this object is higher priority, 0 if they are equal, negative number if the second object is higher.
+	 * @param building2
+	 *            building to compare against.
+	 * @return positive value if the this object is higher priority, 0 if they are
+	 *         equal, negative number if the second object is higher.
 	 */
 	public int compareBuildingValueTo(Building building2) {
 		// TODO: Remove method? Because it is a very specific ordering. Use Comparator?
