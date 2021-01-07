@@ -1,12 +1,14 @@
 package adver.sarius.foe.settlement;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SettlementOptimizer {
 
 	private List<Building> optimalPlacedBuildings;
 	private Building optimalEmbassy;
 	private int optimalCoinProduction = -1;
+	private boolean stopRecursion = false;
 	private int globalMinX;
 	private int globalMinY;
 	private int globalMaxX;
@@ -55,14 +57,11 @@ public class SettlementOptimizer {
 		}
 	}
 
-	// TODO: Optimization ideas:
-	//
-	// if every building has street connection, stop further checks. Either test
-	// every coordinate. Or before coordinate check.
 	private void tryNextBuilding(Settlement settlement, int startX, int startY) {
 
 		if (settlement.getRemainingBuildings().isEmpty()) {
-			// TODO: Finished.
+			// Should only happen, if it has no buildings already from the beginning?
+			return;
 		}
 
 		Building building = settlement.getRemainingBuildings().get(0);
@@ -70,13 +69,17 @@ public class SettlementOptimizer {
 		settlement.getRemainingBuildings().remove(building);
 
 		for (int x = startX; x <= globalMaxX - building.getWidth(); x++) {
+			if (stopRecursion) {
+				// TODO: test different stop positions with performance.
+				break;
+			}
 			for (int y = startY; y <= globalMaxY - building.getHeight(); y++) {
 				building.setPosition(x, y);
 
 				if (settlement.doesTileFit(building) && settlement.doNecesssaryBuildingsHaveStreet()) {
 					// if next building in the list is same dimension, they don't need to switch
 					// positions. So the next buildings checks can start from current index.
-					if(!settlement.getRemainingBuildings().isEmpty()) {
+					if (!settlement.getRemainingBuildings().isEmpty()) {
 						Building nextBuilding = settlement.getRemainingBuildings().get(0);
 						// assuming pre-ordered list.
 						if (nextBuilding.getWidth() == building.getWidth()
@@ -87,8 +90,19 @@ public class SettlementOptimizer {
 							tryNextBuilding(settlement, globalMinX, globalMinY);
 						}
 					} else {
-						// TODO: move recursion exit condition from the top to here instead? 
-						tryNextBuilding(settlement, x, y);
+
+						if (settlement.getCoinProduction() > this.optimalCoinProduction) {
+							this.optimalCoinProduction = settlement.getCoinProduction();
+							this.optimalEmbassy = new Building(settlement.getEmbassy());
+							this.optimalPlacedBuildings = settlement.getPlacedBuildings().stream().map(Building::new)
+									.collect(Collectors.toList());
+						}
+						// required streets are guaranteed at this point.
+						if (settlement.doOptionalBuildingsHaveStreet()) {
+							// if optional streets are also true, there is no need to test any more setups.
+							// also in this case the coin production has to be optimal.
+							this.stopRecursion = true;
+						}
 					}
 				}
 				// if it does not fit, don't try other buildings. We only want all or nothing.

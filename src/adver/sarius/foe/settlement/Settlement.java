@@ -59,7 +59,11 @@ public class Settlement {
 	}
 
 	public boolean doNecesssaryBuildingsHaveStreet() {
-		// TODO: Better name. And logic. checkRoadRequirements
+		// TODO: Better name. And logic? checkRoadRequirements
+		return false;
+	}
+	
+	public boolean doOptionalBuildingsHaveStreet() {
 		return false;
 	}
 
