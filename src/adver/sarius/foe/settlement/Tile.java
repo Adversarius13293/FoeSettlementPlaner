@@ -37,6 +37,10 @@ public class Tile {
 
 	public Tile(Tile tile) {
 		this.posX = tile.posX;
+		this.posY = tile.posY;
+		this.height = tile.height;
+		this.width = tile.width;
+		this.color = tile.color;
 	}
 
 	public void setPosition(int x, int y) {
@@ -61,17 +65,17 @@ public class Tile {
 	}
 
 	public int getSurface() {
-		return width*height;
+		return width * height;
 	}
-	
+
 	public Color getColor() {
 		return this.color;
 	}
 
 	public boolean intersects(Tile tile) {
-		return this.getPosX() > tile.getPosX() + tile.getWidth() || this.getPosY() > tile.getPosY() + tile.getHeight()
+		return !(this.getPosX() > tile.getPosX() + tile.getWidth() || this.getPosY() > tile.getPosY() + tile.getHeight()
 				|| tile.getPosX() > this.getPosX() + this.getWidth()
-				|| tile.getPosY() > this.getPosY() + this.getHeight();
+				|| tile.getPosY() > this.getPosY() + this.getHeight());
 	}
 
 	public boolean contains(Tile tile) {

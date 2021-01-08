@@ -19,6 +19,7 @@ public class Main {
 		// check all buildings, if they are in reach if needed.
 
 		Settlement settlement = Settlement.getNewFeudalJapan();
+		settlement.getRemainingBuildings().add(new Building(settlement.getAvailableBuildingTypes().get(0)));
 		
 		
 		new SettlementOptimizer().testAllSetups(settlement);

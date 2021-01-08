@@ -1,18 +1,31 @@
 package adver.sarius.foe.settlement;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SettlementOptimizer {
 
-	private List<Building> optimalPlacedBuildings;
+	private List<Building> optimalPlacedBuildings = new ArrayList<>();
 	private Building optimalEmbassy;
 	private int optimalCoinProduction = -1;
 	private boolean stopRecursion = false;
-	private int globalMinX;
-	private int globalMinY;
-	private int globalMaxX;
-	private int globalMaxY;
+	private int globalMinX = Integer.MAX_VALUE;
+	private int globalMinY = Integer.MAX_VALUE;
+	private int globalMaxX = -1;
+	private int globalMaxY = -1;
+
+	public List<Building> getOptimalPlacedBuildings() {
+		return optimalPlacedBuildings;
+	}
+
+	public Building getOptimalEmbassy() {
+		return optimalEmbassy;
+	}
+
+	public int getOptimalCoinProduction() {
+		return optimalCoinProduction;
+	}
 
 	public void testAllSetups(Settlement settlement) {
 
@@ -31,7 +44,10 @@ public class SettlementOptimizer {
 			}
 		}
 		settlement.getPlacedBuildings().remove(embassy);
+		
 		// In the end set settlement buildings to found optimum
+		settlement.setEmbassy(optimalEmbassy);
+		settlement.setPlacedBuildings(optimalPlacedBuildings);
 	}
 
 	/**
@@ -88,9 +104,9 @@ public class SettlementOptimizer {
 							tryNextBuilding(settlement, globalMinX, globalMinY);
 						}
 					} else {
-
-						if (settlement.getCoinProduction() > this.optimalCoinProduction) {
-							this.optimalCoinProduction = settlement.getCoinProduction();
+						int coinProd = settlement.getCoinProduction(); 
+						if (coinProd > this.optimalCoinProduction) {
+							this.optimalCoinProduction = coinProd;
 							this.optimalEmbassy = new Building(settlement.getEmbassy());
 							this.optimalPlacedBuildings = settlement.getPlacedBuildings().stream().map(Building::new)
 									.collect(Collectors.toList());

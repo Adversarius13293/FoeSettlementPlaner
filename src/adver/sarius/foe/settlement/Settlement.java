@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Settlement {
 
@@ -17,7 +18,7 @@ public class Settlement {
 	private List<Building> remainingBuildings;
 
 	// TODO: find some static solution for building types?
-	private List<Building> availableBuildings;
+	private List<Building> availableBuildingTypes;
 
 	private Settlement() {
 
@@ -43,8 +44,16 @@ public class Settlement {
 		return placedBuildings;
 	}
 
-	public List<Building> getAvailableBuildings() {
-		return availableBuildings;
+	public void setEmbassy(Building embassy) {
+		this.embassy = embassy;
+	}
+
+	public void setPlacedBuildings(List<Building> placedBuildings) {
+		this.placedBuildings = placedBuildings;
+	}
+
+	public List<Building> getAvailableBuildingTypes() {
+		return availableBuildingTypes;
 	}
 
 	public List<Building> getRemainingBuildings() {
@@ -56,7 +65,7 @@ public class Settlement {
 	}
 
 	private Set<Building> getBuildingsWithRoad() {
-		// TODO: starting from embassy, recursively find everything with a valid road.
+		// TODO: Optimization idea: cache last result until a building gets changed?
 		// TODO: Optimization idea: have a stack of Tiles instead of creating new ones
 		List<Tile> checkedTiles = new ArrayList<>();
 		Set<Building> connectedBuildings = new HashSet<>();
@@ -82,8 +91,8 @@ public class Settlement {
 	}
 
 	/**
-	 * Find all other roads connected to the last road tile. Connected buildings will be
-	 * added to the set.
+	 * Find all other roads connected to the last road tile. Connected buildings
+	 * will be added to the set.
 	 * 
 	 * @param lastTile
 	 *            the last valid 1x1 road tile checked.
@@ -144,9 +153,14 @@ public class Settlement {
 	}
 
 	public int getCoinProduction() {
-		// TODO: Everything that needs or may need a road and has a road. And everything
-		// that does not need a road.
-		return -1;
+		Set<Building> withRoad = getBuildingsWithRoad();
+		return placedBuildings.stream().mapToInt(b -> {
+			if (withRoad.contains(b) || b.getRoadPriority() < 0) {
+				return b.getCoinProduction();
+			} else {
+				return 0;
+			}
+		}).sum();
 	}
 
 	public boolean doesTileFit(Tile tile) {
@@ -156,6 +170,7 @@ public class Settlement {
 
 		// TODO: somehow check with only one list?
 		if (blockedTilesToBuy.stream().anyMatch(t -> t.intersects(tile))) {
+			List<Tile> blocking = blockedTilesToBuy.stream().filter(t -> t.intersects(tile)).collect(Collectors.toList());
 			return false;
 		}
 		if (permanentlyBlockedTiles.stream().anyMatch(t -> t.intersects(tile))) {
@@ -217,25 +232,25 @@ public class Settlement {
 		s.permanentlyBlockedTiles.add(new Tile(3 * 4, 3 * 4, 0, 12, Color.BLACK));
 		s.permanentlyBlockedTiles.add(new Tile(4, 4, 20, 0, Color.BLACK));
 
-		s.availableBuildings = new ArrayList<>();
+		s.availableBuildingTypes = new ArrayList<>();
 
-		s.availableBuildings.add(new Building(2, 2, "Gasshō-zukuri-Hütte", 125, 20, 0, 0));
-		s.availableBuildings.add(new Building(1, 1, "Tōrō", 0, 0, 6, -1));
-		s.availableBuildings.add(new Building(4, 3, "Sojabohnenfeld", -1000, -36, 0, 1));
+		s.availableBuildingTypes.add(new Building(2, 2, "Gasshō-zukuri-Hütte", 125, 20, 0, 0));
+		s.availableBuildingTypes.add(new Building(1, 1, "Tōrō", 0, 0, 6, -1));
+		s.availableBuildingTypes.add(new Building(4, 3, "Sojabohnenfeld", -1000, -36, 0, 1));
 		// TODO: how to switch production times?
-		s.availableBuildings.add(new Building(2, 3, "Shinto-Schrein", 625, -26, 36, 1));
-		s.availableBuildings.add(new Building(3, 3, "Galerie", -1000, -45, 0, 1));
-		s.availableBuildings.add(new Building(4, 4, "Waffenmeister", -1000, -24, 0, 1));
-		s.availableBuildings.add(new Building(2, 4, "Shoin-zukuri-Haus", 440 / 2, 68, 0, 0));
-		s.availableBuildings.add(new Building(3, 1, "Dekoriertes Torii-Tor", 0, 0, 36, -1));
-		s.availableBuildings.add(new Building(1, 3, "Heiliges Torii-Tor", 0, 0, 36, -1));
-		s.availableBuildings.add(new Building(3, 4, "Instrumentenproduktionsstätte", -1000, -36, 0, 1));
-		s.availableBuildings.add(new Building(3, 4, "Teehaus", 1629, -51, 144, 1));
-		s.availableBuildings.add(new Building(4, 4, "Shinden-Zukuri-Landgut", 1084 / 2, 230, 0, 0));
-		s.availableBuildings.add(new Building(3, 2, "Zen-Garten", 0, 0, 108, -1));
-		s.availableBuildings.add(new Building(5, 3, "Dojo", 2340, -63, 270, 1));
+		s.availableBuildingTypes.add(new Building(2, 3, "Shinto-Schrein", 625, -26, 36, 1));
+		s.availableBuildingTypes.add(new Building(3, 3, "Galerie", -1000, -45, 0, 1));
+		s.availableBuildingTypes.add(new Building(4, 4, "Waffenmeister", -1000, -24, 0, 1));
+		s.availableBuildingTypes.add(new Building(2, 4, "Shoin-zukuri-Haus", 440 / 2, 68, 0, 0));
+		s.availableBuildingTypes.add(new Building(3, 1, "Dekoriertes Torii-Tor", 0, 0, 36, -1));
+		s.availableBuildingTypes.add(new Building(1, 3, "Heiliges Torii-Tor", 0, 0, 36, -1));
+		s.availableBuildingTypes.add(new Building(3, 4, "Instrumentenproduktionsstätte", -1000, -36, 0, 1));
+		s.availableBuildingTypes.add(new Building(3, 4, "Teehaus", 1629, -51, 144, 1));
+		s.availableBuildingTypes.add(new Building(4, 4, "Shinden-Zukuri-Landgut", 1084 / 2, 230, 0, 0));
+		s.availableBuildingTypes.add(new Building(3, 2, "Zen-Garten", 0, 0, 108, -1));
+		s.availableBuildingTypes.add(new Building(5, 3, "Dojo", 2340, -63, 270, 1));
 
-		s.embassy = new Building(3, 4, "Botschaft", 100 / 6, 0, 0, 1);
+		s.embassy = new Building(3, 4, "Botschaft", 100 / 6, 0, 0, -1);
 		return s;
 	}
 }

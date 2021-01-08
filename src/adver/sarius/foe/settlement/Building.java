@@ -36,6 +36,11 @@ public class Building extends Tile {
 
 	public Building(Building building) {
 		super(building);
+		this.name = building.name;
+		this.coinProduction = building.coinProduction;
+		this.populationGain = building.populationGain;
+		this.diplomacy = building.diplomacy;
+		this.roadPriority = building.roadPriority;
 	}
 
 	public String getName() {
