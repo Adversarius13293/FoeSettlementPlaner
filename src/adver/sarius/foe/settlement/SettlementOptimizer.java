@@ -8,12 +8,12 @@ public class SettlementOptimizer {
 
 	private List<Building> optimalPlacedBuildings = new ArrayList<>();
 	private Building optimalEmbassy;
-	private int optimalCoinProduction = -1;
+	private int optimalCoinProduction = Integer.MIN_VALUE;
 	private boolean stopRecursion = false;
 	private int globalMinX = Integer.MAX_VALUE;
 	private int globalMinY = Integer.MAX_VALUE;
-	private int globalMaxX = -1;
-	private int globalMaxY = -1;
+	private int globalMaxX = Integer.MIN_VALUE;
+	private int globalMaxY = Integer.MIN_VALUE;
 
 	public List<Building> getOptimalPlacedBuildings() {
 		return optimalPlacedBuildings;
@@ -34,9 +34,8 @@ public class SettlementOptimizer {
 		Building embassy = settlement.getEmbassy();
 		settlement.getPlacedBuildings().add(embassy);
 		// test all positions for embassy
-		for (int x = globalMinX; x <= globalMaxX - embassy.getWidth(); x++) {
-			for (int y = globalMinY; y <= globalMaxY - embassy.getHeight(); y++) {
-
+		for (int x = globalMinX; x <= globalMaxX - embassy.getWidth() + 1; x++) {
+			for (int y = globalMinY; y <= globalMaxY - embassy.getHeight() + 1; y++) {
 				embassy.setPosition(x, y);
 				if (settlement.doesTileFit(embassy)) {
 					tryNextBuilding(settlement, globalMinX, globalMinY);
@@ -44,7 +43,7 @@ public class SettlementOptimizer {
 			}
 		}
 		settlement.getPlacedBuildings().remove(embassy);
-		
+
 		// In the end set settlement buildings to found optimum
 		settlement.setEmbassy(optimalEmbassy);
 		settlement.setPlacedBuildings(optimalPlacedBuildings);
@@ -82,14 +81,15 @@ public class SettlementOptimizer {
 		settlement.getPlacedBuildings().add(building);
 		settlement.getRemainingBuildings().remove(building);
 
-		for (int x = startX; x <= globalMaxX - building.getWidth(); x++) {
+		for (int x = startX; x <= globalMaxX - building.getWidth() + 1; x++) {
 			if (stopRecursion) {
 				// TODO: test different stop positions with performance.
 				break;
 			}
-			for (int y = startY; y <= globalMaxY - building.getHeight(); y++) {
+			for (int y = startY; y <= globalMaxY - building.getHeight() + 1; y++) {
+				// TODO: Remove this line for performance, and always start at MinY?
+				startY = globalMinY;
 				building.setPosition(x, y);
-
 				if (settlement.doesTileFit(building) && settlement.doNecesssaryBuildingsHaveRoad()) {
 					// if next building in the list is same dimension, they don't need to switch
 					// positions. So the next buildings checks can start from current index.
@@ -104,7 +104,7 @@ public class SettlementOptimizer {
 							tryNextBuilding(settlement, globalMinX, globalMinY);
 						}
 					} else {
-						int coinProd = settlement.getCoinProduction(); 
+						int coinProd = settlement.getCoinProduction();
 						if (coinProd > this.optimalCoinProduction) {
 							this.optimalCoinProduction = coinProd;
 							this.optimalEmbassy = new Building(settlement.getEmbassy());

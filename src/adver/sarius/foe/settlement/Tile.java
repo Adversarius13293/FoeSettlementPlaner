@@ -31,8 +31,8 @@ public class Tile {
 		this(height, width, x, y, randomColor());
 	}
 
-	public Tile(int lenght, int width) {
-		this(0, 0, lenght, width);
+	public Tile(int height, int width) {
+		this(height, width, 0, 0);
 	}
 
 	public Tile(Tile tile) {
@@ -73,9 +73,10 @@ public class Tile {
 	}
 
 	public boolean intersects(Tile tile) {
-		return !(this.getPosX() > tile.getPosX() + tile.getWidth() || this.getPosY() > tile.getPosY() + tile.getHeight()
-				|| tile.getPosX() > this.getPosX() + this.getWidth()
-				|| tile.getPosY() > this.getPosY() + this.getHeight());
+		return !(this.getPosX() >= tile.getPosX() + tile.getWidth()
+				|| this.getPosY() >= tile.getPosY() + tile.getHeight()
+				|| tile.getPosX() >= this.getPosX() + this.getWidth()
+				|| tile.getPosY() >= this.getPosY() + this.getHeight());
 	}
 
 	public boolean contains(Tile tile) {

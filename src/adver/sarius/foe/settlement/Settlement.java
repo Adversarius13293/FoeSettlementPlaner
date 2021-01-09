@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Settlement {
 
@@ -69,8 +68,8 @@ public class Settlement {
 		// TODO: Optimization idea: have a stack of Tiles instead of creating new ones
 		List<Tile> checkedTiles = new ArrayList<>();
 		Set<Building> connectedBuildings = new HashSet<>();
-		int maxX = embassy.getWidth() + embassy.getPosX() + 1;
-		int maxY = embassy.getHeight() + embassy.getPosY() + 1;
+		int maxX = embassy.getWidth() + embassy.getPosX();
+		int maxY = embassy.getHeight() + embassy.getPosY();
 		for (int x = embassy.getPosX() - 1; x <= maxX; x++) {
 			for (int y = embassy.getPosY() - 1; y <= maxY; y++) {
 				if ((x == embassy.getPosX() - 1 || x == maxX) && (y == embassy.getPosY() - 1 || y == maxY)) {
@@ -78,11 +77,11 @@ public class Settlement {
 					continue;
 				}
 				Tile road = new Tile(1, 1, x, y);
-				checkedTiles.add(road);
 				// TODO: find more efficient way to only check border of embassy?
 				if (embassy.contains(road) || !doesTileFit(road)) {
 					continue;
 				} else {
+					checkedTiles.add(road);
 					findOtherRoads(road, checkedTiles, connectedBuildings);
 				}
 			}
@@ -115,6 +114,9 @@ public class Settlement {
 						continue;
 					} else {
 						Tile currentTile = new Tile(1, 1, newX, newY);
+						// TODO: put tiles and buildings in one list, and filter afterwards? Not sure if
+						// it performs better. That way I could skip all tiles of an already checked
+						// building.
 						checkedTiles.add(currentTile);
 						if (doesTileFit(currentTile)) {
 							findOtherRoads(currentTile, checkedTiles, connectedBuildings);
@@ -170,7 +172,6 @@ public class Settlement {
 
 		// TODO: somehow check with only one list?
 		if (blockedTilesToBuy.stream().anyMatch(t -> t.intersects(tile))) {
-			List<Tile> blocking = blockedTilesToBuy.stream().filter(t -> t.intersects(tile)).collect(Collectors.toList());
 			return false;
 		}
 		if (permanentlyBlockedTiles.stream().anyMatch(t -> t.intersects(tile))) {
