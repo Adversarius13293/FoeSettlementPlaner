@@ -235,24 +235,27 @@ public class Settlement {
 
 		s.availableBuildingTypes = new ArrayList<>();
 
-		// TODO: define some matching colors
-		s.availableBuildingTypes.add(new Building(2, 2, "Gasshō-zukuri-Hütte", 125, 20, 0, 0));
-		s.availableBuildingTypes.add(new Building(1, 1, "Tōrō", 0, 0, 6, -1));
-		s.availableBuildingTypes.add(new Building(4, 3, "Sojabohnenfeld", -1000, -36, 0, 1));
+		s.availableBuildingTypes.add(new Building(2, 2, 0, 0, Color.CYAN, "Gasshō-zukuri-Hütte", 125, 20, 0, 0));
+		s.availableBuildingTypes.add(new Building(1, 1, 0, 0, Color.DARK_GRAY, "Tōrō", 0, 0, 6, -1));
+		s.availableBuildingTypes.add(new Building(4, 3, 0, 0, Color.YELLOW, "Sojabohnenfeld", -1000, -36, 0, 1));
 		// TODO: how to switch production times?
-		s.availableBuildingTypes.add(new Building(2, 3, "Shinto-Schrein", 625, -26, 36, 1));
-		s.availableBuildingTypes.add(new Building(3, 3, "Galerie", -1000, -45, 0, 1));
-		s.availableBuildingTypes.add(new Building(4, 4, "Waffenmeister", -1000, -24, 0, 1));
-		s.availableBuildingTypes.add(new Building(2, 4, "Shoin-zukuri-Haus", 440 / 2, 68, 0, 0));
-		s.availableBuildingTypes.add(new Building(3, 1, "Dekoriertes Torii-Tor", 0, 0, 36, -1));
-		s.availableBuildingTypes.add(new Building(1, 3, "Heiliges Torii-Tor", 0, 0, 36, -1));
-		s.availableBuildingTypes.add(new Building(3, 4, "Instrumentenproduktionsstätte", -1000, -36, 0, 1));
-		s.availableBuildingTypes.add(new Building(3, 4, "Teehaus", 1629, -51, 144, 1));
-		s.availableBuildingTypes.add(new Building(4, 4, "Shinden-Zukuri-Landgut", 1084 / 2, 230, 0, 0));
-		s.availableBuildingTypes.add(new Building(3, 2, "Zen-Garten", 0, 0, 108, -1));
-		s.availableBuildingTypes.add(new Building(5, 3, "Dojo", 2340, -63, 270, 1));
+		s.availableBuildingTypes.add(new Building(2, 3, 0, 0, Color.GRAY, "Shinto-Schrein", 625, -26, 36, 1));
+		s.availableBuildingTypes.add(new Building(3, 3, 0, 0, new Color(112, 67, 12), "Galerie", -1000, -45, 0, 1));
+		s.availableBuildingTypes.add(new Building(4, 4, 0, 0, Color.ORANGE, "Waffenmeister", -1000, -24, 0, 1));
+		s.availableBuildingTypes.add(new Building(2, 4, 0, 0, Color.BLUE, "Shoin-zukuri-Haus", 440 / 2, 68, 0, 0));
+		s.availableBuildingTypes
+				.add(new Building(3, 1, 0, 0, new Color(82, 9, 5), "Dekoriertes Torii-Tor", 0, 0, 36, -1));
+		s.availableBuildingTypes
+				.add(new Building(1, 3, 0, 0, new Color(138, 10, 59), "Heiliges Torii-Tor", 0, 0, 36, -1));
+		s.availableBuildingTypes.add(
+				new Building(3, 4, 0, 0, new Color(222, 203, 191), "Instrumentenproduktionsstätte", -1000, -36, 0, 1));
+		s.availableBuildingTypes.add(new Building(3, 4, 0, 0, new Color(115, 178, 199), "Teehaus", 1629, -51, 144, 1));
+		s.availableBuildingTypes
+				.add(new Building(4, 4, 0, 0, new Color(4, 3, 94), "Shinden-Zukuri-Landgut", 1084 / 2, 230, 0, 0));
+		s.availableBuildingTypes.add(new Building(3, 2, 0, 0, new Color(201, 6, 198), "Zen-Garten", 0, 0, 108, -1));
+		s.availableBuildingTypes.add(new Building(5, 3, 0, 0, Color.RED, "Dojo", 2340, -63, 270, 1));
 
-		s.embassy = new Building(3, 4, "Botschaft", 100 / 6, 0, 0, -1);
+		s.embassy = new Building(3, 4, 0, 0, Color.MAGENTA, "Botschaft", 100 / 6, 0, 0, -1);
 		return s;
 	}
 }
