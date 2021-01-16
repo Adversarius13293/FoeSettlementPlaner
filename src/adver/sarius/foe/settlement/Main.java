@@ -5,30 +5,34 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import adver.sarius.foe.settlement.tester.PerformanceTest;
+
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO:
 
-		// Place embassy first.
-		// place buildings at every possible position.
-		// check if not obstructed by map, not purchased tiles, stones, embassy or other
-		// buildings.
+		PerformanceTest.startPerformanceTests();
 
-		// after every building, compute all buildings in range of embassy.
-		// check all buildings, if they are in reach if needed.
-
+		// TODO: Input GUI
 		Settlement settlement = Settlement.getNewFeudalJapan();
-		settlement.getRemainingBuildings().add(new Building(settlement.getAvailableBuildingTypes().get(0)));
-		
-		
-		new SettlementOptimizer().testAllSetups(settlement);
-		
-		
+
+		for (int i = 0; i < 4; i++) {
+			settlement.getRemainingBuildings().add(new Building(settlement.getAvailableBuildingTypes().get(0))); // Haus
+		}
+		for (int i = 0; i < 1; i++) {
+			settlement.getRemainingBuildings().add(new Building(settlement.getAvailableBuildingTypes().get(2))); // Soja
+		}
+		// settlement.getRemainingBuildings().add(new
+		// Building(settlement.getAvailableBuildingTypes().get(4))); // Shinto
+
+		// settlement.getImpediments().add(new Tile(1,1,18,4));
+
+		new SettlementOptimizer().testSetups(settlement);
+
 		JFrame mainFrame = new JFrame("Kulturelle Siedlung");
 		mainFrame.setLayout(new BorderLayout());
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
+
 		SettlementDrawer drawer = new SettlementDrawer(settlement);
 		drawer.setScaling(20);
 

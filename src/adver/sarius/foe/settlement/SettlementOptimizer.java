@@ -27,8 +27,7 @@ public class SettlementOptimizer {
 		return optimalCoinProduction;
 	}
 
-	public void testAllSetups(Settlement settlement) {
-
+	public void testSetups(Settlement settlement) {
 		setGlobalBounds(settlement);
 
 		Building embassy = settlement.getEmbassy();

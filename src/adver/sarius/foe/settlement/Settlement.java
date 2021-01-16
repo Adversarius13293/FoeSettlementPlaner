@@ -235,6 +235,7 @@ public class Settlement {
 
 		s.availableBuildingTypes = new ArrayList<>();
 
+		// TODO: define some matching colors
 		s.availableBuildingTypes.add(new Building(2, 2, "Gasshō-zukuri-Hütte", 125, 20, 0, 0));
 		s.availableBuildingTypes.add(new Building(1, 1, "Tōrō", 0, 0, 6, -1));
 		s.availableBuildingTypes.add(new Building(4, 3, "Sojabohnenfeld", -1000, -36, 0, 1));
