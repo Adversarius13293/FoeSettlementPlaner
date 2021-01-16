@@ -28,20 +28,22 @@ public class SettlementOptimizer {
 	}
 
 	public void testSetups(Settlement settlement) {
-		setGlobalBounds(settlement);
+		if (settlement.getTotalAvailableSurface() >= settlement.getTotalBuildingSurface()) {
+			setGlobalBounds(settlement);
 
-		Building embassy = settlement.getEmbassy();
-		settlement.getPlacedBuildings().add(embassy);
-		// test all positions for embassy
-		for (int x = globalMinX; x <= globalMaxX - embassy.getWidth() + 1; x++) {
-			for (int y = globalMinY; y <= globalMaxY - embassy.getHeight() + 1; y++) {
-				embassy.setPosition(x, y);
-				if (settlement.doesTileFit(embassy)) {
-					tryNextBuilding(settlement, globalMinX, globalMinY);
+			Building embassy = settlement.getEmbassy();
+			settlement.getPlacedBuildings().add(embassy);
+			// test all positions for embassy
+			for (int x = globalMinX; x <= globalMaxX - embassy.getWidth() + 1; x++) {
+				for (int y = globalMinY; y <= globalMaxY - embassy.getHeight() + 1; y++) {
+					embassy.setPosition(x, y);
+					if (settlement.doesTileFit(embassy)) {
+						tryNextBuilding(settlement, globalMinX, globalMinY);
+					}
 				}
 			}
+			settlement.getPlacedBuildings().remove(embassy);
 		}
-		settlement.getPlacedBuildings().remove(embassy);
 
 		// In the end set settlement buildings to found optimum
 		settlement.setEmbassy(optimalEmbassy);

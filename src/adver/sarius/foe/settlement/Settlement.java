@@ -2,6 +2,7 @@ package adver.sarius.foe.settlement;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -130,6 +131,44 @@ public class Settlement {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @return coin production minus coin consumption of all buildings.
+	 */
+	public int getTtoalCoinOutput() {
+		return remainingBuildings.stream().mapToInt(Building::getCoinProduction).sum()
+				+ placedBuildings.stream().mapToInt(Building::getCoinProduction).sum()
+				+ (placedBuildings.contains(embassy) ? 0 : embassy.getCoinProduction());
+	}
+
+	/**
+	 * @return number of possible tiles for buildings.
+	 */
+	public int getTotalAvailableSurface() {
+		Tile tile = new Tile(1, 1);
+		int surface = 0;
+		List<Building> tmp = this.placedBuildings;
+		this.placedBuildings = Collections.emptyList();
+		for (int x = baseLayout.getPosX(); x < baseLayout.getWidth(); x++) {
+			for (int y = baseLayout.getPosY(); y < baseLayout.getHeight(); y++) {
+				tile.setPosition(x, y);
+				if (doesTileFit(tile)) {
+					surface++;
+				}
+			}
+		}
+		this.placedBuildings = tmp;
+		return surface;
+	}
+
+	/**
+	 * @return surface of all buildings.
+	 */
+	public int getTotalBuildingSurface() {
+		return remainingBuildings.stream().mapToInt(Building::getSurface).sum()
+				+ placedBuildings.stream().mapToInt(Building::getSurface).sum()
+				+ (placedBuildings.contains(embassy) ? 0 : embassy.getSurface());
 	}
 
 	private Building getBuildingContaining(Tile tile) {
