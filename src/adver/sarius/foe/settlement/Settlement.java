@@ -66,23 +66,23 @@ public class Settlement {
 
 	private Set<Building> getBuildingsWithRoad() {
 		// TODO: Optimization idea: cache last result until a building gets changed?
-		// TODO: Optimization idea: have a stack of Tiles instead of creating new ones
 		List<Tile> checkedTiles = new ArrayList<>();
 		Set<Building> connectedBuildings = new HashSet<>();
 		int maxX = embassy.getWidth() + embassy.getPosX();
 		int maxY = embassy.getHeight() + embassy.getPosY();
+		Tile road = new Tile(1, 1);
 		for (int x = embassy.getPosX() - 1; x <= maxX; x++) {
 			for (int y = embassy.getPosY() - 1; y <= maxY; y++) {
 				if ((x == embassy.getPosX() - 1 || x == maxX) && (y == embassy.getPosY() - 1 || y == maxY)) {
 					// skip corners
 					continue;
 				}
-				Tile road = new Tile(1, 1, x, y);
+				road.setPosition(x, y);
 				// TODO: find more efficient way to only check border of embassy?
 				if (embassy.contains(road) || !doesTileFit(road)) {
 					continue;
 				} else {
-					checkedTiles.add(road);
+					checkedTiles.add(new Tile(road));
 					findOtherRoads(road, checkedTiles, connectedBuildings);
 				}
 			}
@@ -228,6 +228,7 @@ public class Settlement {
 		return true;
 	}
 
+	// TODO: Custom class for every settlement. With method for setup, all buildings, und plublic building members
 	public static Settlement getNewFeudalJapan() {
 		Settlement s = new Settlement();
 		s.placedBuildings = new ArrayList<>();
@@ -236,15 +237,15 @@ public class Settlement {
 		s.baseLayout = new Tile(6 * 4, 6 * 4, 0, 0, Color.GREEN);
 
 		s.blockedTilesToBuy = new ArrayList<>();
-		s.blockedTilesToBuy.add(new Tile(4, 4, 0, 0, Color.LIGHT_GRAY));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 4, 0, Color.LIGHT_GRAY));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 8, 0, Color.LIGHT_GRAY));
+//		s.blockedTilesToBuy.add(new Tile(4, 4, 0, 0, Color.LIGHT_GRAY));
+//		s.blockedTilesToBuy.add(new Tile(4, 4, 4, 0, Color.LIGHT_GRAY));
+//		s.blockedTilesToBuy.add(new Tile(4, 4, 8, 0, Color.LIGHT_GRAY));
 		// s.blockedTilesToBuy.add(new Tile(4, 4, 12, 0)); // starting squares
 		// s.blockedTilesToBuy.add(new Tile(4, 4, 16, 0));
 
 		s.blockedTilesToBuy.add(new Tile(4, 4, 0, 4, Color.LIGHT_GRAY));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 4, 4, Color.LIGHT_GRAY));
-		s.blockedTilesToBuy.add(new Tile(4, 4, 8, 4, Color.LIGHT_GRAY));
+//		s.blockedTilesToBuy.add(new Tile(4, 4, 4, 4, Color.LIGHT_GRAY));
+//		s.blockedTilesToBuy.add(new Tile(4, 4, 8, 4, Color.LIGHT_GRAY));
 		// s.blockedTilesToBuy.add(new Tile(4, 4, 12, 4));
 		// s.blockedTilesToBuy.add(new Tile(4, 4, 16, 4));
 		s.blockedTilesToBuy.add(new Tile(4, 4, 20, 4, Color.LIGHT_GRAY));

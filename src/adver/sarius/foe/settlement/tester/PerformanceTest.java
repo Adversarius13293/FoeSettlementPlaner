@@ -32,18 +32,24 @@ public class PerformanceTest {
 		// 2021-01-16T17:14:16.709 Impossible_Soja(100x): false. Avg time: 156 ms
 		// 2021-01-16T17:32:42.912 Impossible_Soja(100x): false. Avg time: 120 ms
 		// 2021-01-16T19:02:02.404 Impossible_Soja(100x): false. Avg time: 118 ms
+		// first road from ebassy with copy tile
+		// 2021-01-16T21:09:03.895 Impossible_Soja(100x): false. Avg time: 117 ms
 		testSettlementSetup(100, "Impossible_Soja", PerformanceTest::testSmallNotPossibleSoja);
 		// 1 iterations in average time: 175997 ms
 		// 2021-01-16T16:59:11.146 Hard_Starter(1x): true. Average time: 168209 ms.
 		// 2021-01-16T17:17:09.990 Hard_Starter(1x): true. Avg time: 173280 ms
 		// 2021-01-16T17:35:41.016 Hard_Starter(1x): true. Avg time: 178103 ms
 		// 2021-01-16T19:04:50.596 Hard_Starter(1x): true. Avg time: 168190 ms
+		// first road from ebassy with copy tile
+//		2021-01-16T21:11:46.557 Hard_Starter(1x): true. Avg time: 162662 ms
 		testSettlementSetup(1, "Hard_Starter", PerformanceTest::testStarterSetupNotFullyRoads);
 		// 2 iterations in average time: 142314 ms
 		// 2021-01-16T17:03:51.440 Impossible_Starter(1x): true. Average time: 280293
 		// 2021-01-16T17:21:38.448 Impossible_Starter(1x): true. Avg time: 268458 ms
 		// 2021-01-16T17:41:31.663 Impossible_Starter(1x): true. Avg time: 350646 ms
 		// 2021-01-16T19:09:09.017 Impossible_Starter(1x): true. Avg time: 258418 ms
+		// first road from ebassy with copy tile
+//		2021-01-16T21:16:24.286 Impossible_Starter(1x): true. Avg time: 277728 ms
 		testSettlementSetup(1, "Impossible_Starter", PerformanceTest::testStarterSetupNotPossibleFit);
 	}
 

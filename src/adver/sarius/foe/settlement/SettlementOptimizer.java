@@ -84,11 +84,9 @@ public class SettlementOptimizer {
 
 		for (int x = startX; x <= globalMaxX - building.getWidth() + 1; x++) {
 			if (stopRecursion) {
-				// TODO: test different stop positions with performance.
 				break;
 			}
 			for (int y = startY; y <= globalMaxY - building.getHeight() + 1; y++) {
-				// TODO: Remove this line for performance, and always start at MinY?
 				startY = globalMinY;
 				building.setPosition(x, y);
 				if (settlement.doesTileFit(building) && settlement.doNecesssaryBuildingsHaveRoad()) {
@@ -111,6 +109,7 @@ public class SettlementOptimizer {
 							this.optimalEmbassy = new Building(settlement.getEmbassy());
 							this.optimalPlacedBuildings = settlement.getPlacedBuildings().stream().map(Building::new)
 									.collect(Collectors.toList());
+							System.out.println("Found a possible solution. Looking for better setup.");
 						}
 						// required roads are guaranteed at this point.
 						if (settlement.doOptionalBuildingsHaveRoad()) {

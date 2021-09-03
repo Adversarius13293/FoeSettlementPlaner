@@ -27,7 +27,6 @@ public class Tile {
 	}
 
 	public Tile(int height, int width, int x, int y) {
-		// TODO: Verify range
 		this(height, width, x, y, randomColor());
 	}
 
